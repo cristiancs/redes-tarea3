@@ -1,10 +1,5 @@
-proxy/DBHandler.class
-proxy/App.class
-proxy/BlockingQueue.class
-proxy/TaskExecutor.class
-proxy/LogHandler.class
-proxy/FTPMain$RequestHandler.class
-proxy/FTPMain.class
-proxy/EdgeHandler.class
-proxy/App$RequestHandler.class
-proxy/ThreadPool.class
+streaming/ThreadPool.class
+streaming/TaskExecutor.class
+streaming/FTPMain$RequestHandler.class
+streaming/BlockingQueue.class
+streaming/FTPMain.class
