@@ -1,5 +1,5 @@
+streaming/FTPMain$RequestHandler.class
 streaming/ThreadPool.class
 streaming/TaskExecutor.class
-streaming/FTPMain$RequestHandler.class
 streaming/BlockingQueue.class
 streaming/FTPMain.class
