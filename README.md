@@ -10,7 +10,3 @@
 # Ejecucion
 
     java -cp target/streaming-1.0-SNAPSHOT-jar-with-dependencies.jar streaming.App
-
-# Si ya tienes javacv puedes ejecutar con
-
-    java -classpath mac -cp target/streaming-1.0-SNAPSHOT-jar-with-dependencies.jar streaming.App
