@@ -33,6 +33,12 @@ public class serverConsole implements Runnable {
                     parts = parts[1].split("\\.");
                     String fps = parts[0];
                     this.observable.cambiarMensaje("streaming " + fps);
+                    System.out.println("Ingrese detener para detener la transmisión");
+                    inConsole = System.console().readLine();
+                    while (!inConsole.equals("detener")) {
+                        inConsole = System.console().readLine();
+                    }
+                    this.observable.cambiarMensaje("stop");
 
                 } else {
                     System.out.println("Video no disponible");
@@ -40,6 +46,8 @@ public class serverConsole implements Runnable {
 
             } else if (inConsole.equals("3")) {
                 // To Do: should close connections
+                this.observable.cambiarMensaje("close");
+                break;
             } else {
                 System.out.println("Comando no reconocido");
             }

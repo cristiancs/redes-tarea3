@@ -6,7 +6,11 @@ public class StreamObservable extends Observable {
     String mensaje;
 
     public StreamObservable() {
-        mensaje = "Objeto Observado Iniciado";
+        mensaje = "idle";
+    }
+
+    public String getMensaje() {
+        return mensaje;
     }
 
     public void cambiarMensaje(String m) {

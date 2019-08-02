@@ -25,9 +25,12 @@ public class serverNewUsers implements Runnable {
                 try (ServerSocket listener = new ServerSocket(listenPort)) {
                     out.println(listenPort + ";");
                     socket.close();
-
-                    this.threadPool.submitTask(new serverControlSocket(listener.accept(), this.observable));
-
+                    try {
+                        this.threadPool.submitTask(new serverControlSocket(listener.accept(), this.observable));
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                        break;
+                    }
                     break;
 
                 } catch (Exception e) {

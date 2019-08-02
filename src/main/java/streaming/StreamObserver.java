@@ -2,6 +2,7 @@
 package streaming;
 
 import java.net.Socket;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Observable;
 import java.util.Observer;
@@ -20,15 +21,18 @@ public class StreamObserver implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         String mensaje = arg.toString();
-        if (mensaje.startsWith("streaming ")) {
-            try {
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                out.println(mensaje);
-            } catch (Exception e) {
-                // TODO: handle exception
+        try {
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(mensaje);
+            if (mensaje.equals("close")) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                }
             }
+        } catch (Exception e) {
         }
-        System.out.println("Nueva Actualizacion: " + o + " -> " + arg);
+        // System.out.println("Nueva Actualizacion: " + o + " -> " + arg);
     }
 
 }

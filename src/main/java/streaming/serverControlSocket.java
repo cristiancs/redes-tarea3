@@ -21,7 +21,10 @@ public class serverControlSocket implements Runnable {
 
         try {
             this.out = new PrintWriter(socket.getOutputStream(), true);
-            out.println("Hola desde el servidor de control");
+            out.println(this.observable.getMensaje());
+            if (this.observable.getMensaje().equals("close")) {
+                socket.close();
+            }
 
             StreamObserver observador = new StreamObserver(this.socket);
             this.observable.addObserver(observador);
