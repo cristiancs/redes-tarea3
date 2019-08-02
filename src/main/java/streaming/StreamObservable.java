@@ -29,8 +29,15 @@ public class StreamObservable extends Observable {
     }
 
     public void cambiarMensaje(String m) {
-        if (m.startsWith("control_socket")) {
-            controlPort = Integer.parseInt(m.toString().split(":")[1]);
+        if (m.startsWith("control_socket:")) {
+            controlPort = Integer.parseInt(m.split(":")[1]);
+        }
+        if (m.startsWith("stream_socket:")) {
+            if (m.split(":")[1].equals("1")) {
+                stream1port = Integer.parseInt(m.split(":")[2]);
+            } else {
+                stream2port = Integer.parseInt(m.split(":")[2]);
+            }
         }
         mensaje = m;
         // Marcamos el objeto observable como objeto que ha cambiado

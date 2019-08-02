@@ -23,6 +23,10 @@ public class StreamingServer {
         this.internaObservable = new StreamObservable();
 
         try {
+            this.threadPool
+                    .submitTask(new serverRunStreamServer(this.threadPool, this.observable, internaObservable, 1));
+            this.threadPool
+                    .submitTask(new serverRunStreamServer(this.threadPool, this.observable, internaObservable, 2));
             this.threadPool.submitTask(new serverRunControlServer(this.threadPool, this.observable, internaObservable));
             this.threadPool.submitTask(new serverRunNewUserServer(this.threadPool, this.observable, internaObservable));
             this.threadPool.submitTask(new serverConsole(this.observable, internaObservable));
