@@ -17,8 +17,7 @@ public class serverConsole implements Runnable {
                 for (File f : filesList) {
                     System.out.println(f.getName());
                 }
-            }
-            if (inConsole.equals("2")) {
+            } else if (inConsole.equals("2")) {
                 System.out.println("Ingrese Nombre video");
                 inConsole = System.console().readLine();
                 File tempFile = new File("./media/" + inConsole);
@@ -29,8 +28,7 @@ public class serverConsole implements Runnable {
                     System.out.println("Video no disponible");
                 }
 
-            }
-            if (inConsole.equals("3")) {
+            } else if (inConsole.equals("3")) {
                 // To Do: should close connections
             } else {
                 System.out.println("Comando no reconocido");
