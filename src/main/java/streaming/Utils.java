@@ -11,4 +11,9 @@ public class Utils {
     public String encodeStringToBase64String(String message) {
         return Base64.getEncoder().encodeToString(message.getBytes());
     }
+
+    public String DecodeBase64ToString(String message) {
+        byte[] decoded = Base64.getDecoder().decode(message);
+        return new String(decoded);
+    }
 }

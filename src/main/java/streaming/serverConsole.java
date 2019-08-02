@@ -41,6 +41,7 @@ public class serverConsole implements Runnable {
                         inConsole = System.console().readLine();
                     }
                     this.observable.cambiarMensaje("stop");
+                    this.observable.cambiarMensaje("idle");
 
                 } else {
                     System.out.println("Video no disponible");

@@ -1,3 +1,4 @@
+/Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/clientRunControlServer.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/serverRunNewUserServer.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/serverControlSocket.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/serverStreamSocket.java
@@ -13,3 +14,4 @@
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/Utils.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/StreamObservable.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/StreamingServer.java
+/Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/ClientWindow.java
