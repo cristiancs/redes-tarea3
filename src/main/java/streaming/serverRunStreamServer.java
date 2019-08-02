@@ -15,7 +15,6 @@ public class serverRunStreamServer implements Observer, Runnable {
     public void update(Observable o, Object arg) {
 
         if (arg.toString().equals("close")) {
-            System.out.println(arg);
             this.cerrarSocket = true;
         }
     }
@@ -36,7 +35,7 @@ public class serverRunStreamServer implements Observer, Runnable {
 
             while (!this.cerrarSocket) {
                 this.threadPool.submitTask(
-                        new serverControlSocket(listener.accept(), this.observable, this.internaObservable));
+                        new serverStreamSocket(listener.accept(), this.observable, this.internaObservable, id));
             }
         }
     }

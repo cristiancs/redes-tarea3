@@ -7,6 +7,8 @@ public class StreamObservable extends Observable {
     Integer controlPort = 0;
     Integer stream1port = 0;
     Integer stream2port = 0;
+    String stream1data = "";
+    String stream2data = "";
 
     public StreamObservable() {
         mensaje = "idle";
@@ -28,6 +30,23 @@ public class StreamObservable extends Observable {
         return stream2port;
     }
 
+    public String getStreamData(Integer id) {
+        if (id == 1) {
+            return stream1data;
+        }
+        return stream2data;
+    }
+
+    public void sendStream(String stream, Integer channel) {
+        if (channel == 1) {
+            stream1data = stream;
+        } else {
+            stream2data = stream;
+        }
+        setChanged();
+        notifyObservers(channel);
+    }
+
     public void cambiarMensaje(String m) {
         if (m.startsWith("control_socket:")) {
             controlPort = Integer.parseInt(m.split(":")[1]);
@@ -40,10 +59,7 @@ public class StreamObservable extends Observable {
             }
         }
         mensaje = m;
-        // Marcamos el objeto observable como objeto que ha cambiado
         setChanged();
-        // Notificamos a los observadores y le enviamos el nuevo valor
         notifyObservers(mensaje);
-        // notifyObservers(); Este metodo solo notifica que hubo cambios en el objeto
     }
 }

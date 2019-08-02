@@ -6,33 +6,32 @@ import java.util.Observer;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class serverControlSocket implements Observer, Runnable {
+public class serverStreamSocket implements Observer, Runnable {
 
     private Socket socket;
     private PrintWriter out;
     private StreamObservable observable;
     private StreamObservable internaObservable;
-    Utils utils;
+    private Integer id;
 
-    serverControlSocket(Socket socket, StreamObservable observable, StreamObservable internaObservable) {
+    serverStreamSocket(Socket socket, StreamObservable observable, StreamObservable internaObservable, Integer id) {
         this.socket = socket;
         this.observable = observable;
         this.internaObservable = internaObservable;
+        this.id = id;
     }
 
     @Override
     public void update(Observable o, Object arg) {
         String mensaje = arg.toString();
-        try {
-
-            out.println(utils.encodeStringToBase64String(mensaje));
-            if (mensaje.equals("close")) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                }
+        if (mensaje.equals(Integer.toString(id))) {
+            this.out.println(internaObservable.getStreamData(id));
+        }
+        if (arg.toString().equals("close")) {
+            try {
+                socket.close();
+            } catch (IOException e) {
             }
-        } catch (Exception e) {
         }
 
     }
@@ -42,14 +41,9 @@ public class serverControlSocket implements Observer, Runnable {
 
         try {
             this.out = new PrintWriter(socket.getOutputStream(), true);
-            this.utils = new Utils();
-            out.println(utils.encodeStringToBase64String(this.observable.getMensaje()));
-            if (this.observable.getMensaje().equals("close")) {
-                socket.close();
-            }
-
-            this.observable.addObserver(this);
-            // socket.close();
+            internaObservable.addObserver(this);
+            observable.addObserver(this);
+            // out.println("Stream server" + id);
 
         } catch (Exception e) {
             System.out.println("Socket de control " + socket + " con problemas");

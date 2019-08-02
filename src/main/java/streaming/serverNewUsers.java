@@ -18,7 +18,6 @@ public class serverNewUsers implements Observer, Runnable {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println(arg);
         if (arg.toString().startsWith("control_socket")) {
             controlSocket = internaObservable.getControlPort();
         }
@@ -27,6 +26,12 @@ public class serverNewUsers implements Observer, Runnable {
         }
         if (arg.toString().startsWith("stream_socket:2")) {
             stream2Socket = internaObservable.getStream2Port();
+        }
+        if (arg.toString().equals("close")) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+            }
         }
     }
 
@@ -41,12 +46,14 @@ public class serverNewUsers implements Observer, Runnable {
     @Override
     public void run() {
         internaObservable.addObserver(this);
+        observable.addObserver(this);
         controlSocket = internaObservable.getControlPort();
         stream1Socket = internaObservable.getStream1Port();
         stream2Socket = internaObservable.getStream2Port();
+        Utils utils = new Utils();
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            out.println(controlSocket + ";" + stream1Socket + ";" + stream2Socket);
+            out.println(utils.encodeStringToBase64String(controlSocket + ";" + stream1Socket + ";" + stream2Socket));
             socket.close();
 
         } catch (Exception e) {
