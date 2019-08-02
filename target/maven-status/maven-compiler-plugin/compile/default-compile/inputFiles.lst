@@ -1,8 +1,10 @@
+/Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/StreamObserver.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/serverConsole.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/serverNewUsers.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/TaskExecutor.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/serverControlSocket.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/App.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/ThreadPool.java
+/Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/StreamObservable.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/BlockingQueue.java
 /Users/mhcristian/proyectos/redes-tarea3/src/main/java/streaming/StreamingServer.java

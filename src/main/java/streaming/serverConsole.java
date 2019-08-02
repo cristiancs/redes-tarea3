@@ -3,6 +3,12 @@ package streaming;
 import java.io.File;
 
 public class serverConsole implements Runnable {
+    private StreamObservable observable;
+
+    serverConsole(StreamObservable observable) {
+        this.observable = observable;
+    }
+
     @Override
     public void run() {
         String inConsole = "";
@@ -19,11 +25,15 @@ public class serverConsole implements Runnable {
                 }
             } else if (inConsole.equals("2")) {
                 System.out.println("Ingrese Nombre video");
-                inConsole = System.console().readLine();
+                inConsole = "prueba...25.mp4";// System.console().readLine();
                 File tempFile = new File("./media/" + inConsole);
                 boolean exists = tempFile.exists();
                 if (exists) {
-                    // To Do start player
+                    String parts[] = inConsole.split("\\.\\.\\.");
+                    parts = parts[1].split("\\.");
+                    String fps = parts[0];
+                    this.observable.cambiarMensaje("streaming " + fps);
+
                 } else {
                     System.out.println("Video no disponible");
                 }

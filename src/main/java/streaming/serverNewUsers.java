@@ -8,10 +8,12 @@ import java.io.PrintWriter;
 public class serverNewUsers implements Runnable {
     ThreadPool threadPool;
     private Socket socket;
+    private StreamObservable observable;
 
-    serverNewUsers(Socket socket, ThreadPool threadPool) {
+    serverNewUsers(Socket socket, ThreadPool threadPool, StreamObservable observable) {
         this.socket = socket;
         this.threadPool = threadPool;
+        this.observable = observable;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class serverNewUsers implements Runnable {
                     out.println(listenPort + ";");
                     socket.close();
 
-                    this.threadPool.submitTask(new serverControlSocket(listener.accept()));
+                    this.threadPool.submitTask(new serverControlSocket(listener.accept(), this.observable));
 
                     break;
 

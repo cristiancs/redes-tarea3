@@ -4,8 +4,10 @@ import java.util.Scanner;
 import streaming.StreamingServer;
 
 public class App {
+  Boolean isStreaming = false;
 
   public static void main(String[] args) {
+
     System.out.println(
         "----------------------------------------\nBienvenido al servicio de streaming\n----------------------------------------");
 
