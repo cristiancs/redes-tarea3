@@ -10,3 +10,7 @@
 # Ejecucion
 
     java -cp target/streaming-1.0-SNAPSHOT-jar-with-dependencies.jar streaming.App
+
+# Notas
+
+Para simplificar un poco, solo se abriran suficientes sockets

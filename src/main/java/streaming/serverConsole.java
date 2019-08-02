@@ -4,9 +4,11 @@ import java.io.File;
 
 public class serverConsole implements Runnable {
     private StreamObservable observable;
+    private StreamObservable internaObservable;
 
-    serverConsole(StreamObservable observable) {
+    serverConsole(StreamObservable observable, StreamObservable internaObservable) {
         this.observable = observable;
+        this.internaObservable = internaObservable;
     }
 
     @Override

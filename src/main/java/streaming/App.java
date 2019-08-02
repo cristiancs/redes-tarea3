@@ -14,7 +14,7 @@ public class App {
     String inConsole = "";
     while (true) {
       System.out.println("Seleccione método de funcionamiento\n\n 1) Servidor\n 2) Cliente\n");
-      inConsole = "2";// System.console().readLine();
+      inConsole = "1";// System.console().readLine();
       if (inConsole.equals("1")) {
         System.out.println("Starting Server Mode 2");
         StreamingServer ss = new StreamingServer();
