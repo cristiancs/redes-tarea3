@@ -74,6 +74,7 @@ public class VideoHandler implements Observer, Runnable {
                     }
 
                     g.stop();
+                    g.close();
                 } catch (Exception e) {
                     System.out.println("Error: " + e);
                 }

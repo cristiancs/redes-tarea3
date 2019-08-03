@@ -11,13 +11,13 @@ public class serverControlSocket implements Observer, Runnable {
     private Socket socket;
     private PrintWriter out;
     private StreamObservable observable;
-    private StreamObservable internaObservable;
+    // private StreamObservable internaObservable;
     Utils utils;
 
     serverControlSocket(Socket socket, StreamObservable observable, StreamObservable internaObservable) {
         this.socket = socket;
         this.observable = observable;
-        this.internaObservable = internaObservable;
+        // this.internaObservable = internaObservable;
     }
 
     @Override

@@ -2,9 +2,12 @@ package streaming;
 
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.Observable;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+import java.util.Observer;
 
-class StreamingClient {
+class StreamingClient implements Observer {
     String ip;
     Integer puerto;
     Integer controlPort;
@@ -14,6 +17,20 @@ class StreamingClient {
     ThreadPool threadPool;
     StreamObservable observable;
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg.toString().equals("close")) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(200);
+                System.exit(0);
+            } catch (Exception e) {
+                System.exit(0);
+            }
+
+        }
+
+    }
+
     StreamingClient(String ip, Integer puerto) {
         this.ip = ip;
         this.puerto = puerto;
@@ -22,6 +39,7 @@ class StreamingClient {
     public void start() {
         observable = new StreamObservable();
         utils = new Utils();
+        observable.addObserver(this);
         this.threadPool = new ThreadPool(20, 8);
         streamPorts = new LinkedList<Integer>();
 

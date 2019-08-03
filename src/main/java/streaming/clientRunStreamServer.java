@@ -1,5 +1,6 @@
 package streaming;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
@@ -10,11 +11,19 @@ public class clientRunStreamServer implements Observer, Runnable {
     String ip;
     Integer puerto;
     Integer id;
+    Socket clientSocket;
+    String inText;
     // private ThreadPool threadPool;
     private byte[] imagen;
 
     @Override
     public void update(Observable o, Object arg) {
+        if (arg.toString().equals("end")) {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+            }
+        }
 
     }
 
@@ -30,22 +39,27 @@ public class clientRunStreamServer implements Observer, Runnable {
     public void run() {
         Utils utils = new Utils();
         try {
-            Socket clientSocket = new Socket(ip, puerto);
+            clientSocket = new Socket(ip, puerto);
             Scanner inFromServer = new Scanner(clientSocket.getInputStream());
             Integer inicioBloque = 0;
-            String inText = inFromServer.nextLine();
-
-            String mensaje = utils.DecodeBase64ToString(inText);
-
-            System.out.println(mensaje);
-
-            while (!mensaje.equals("end")) {
-                byte[] chunkBytes = utils.DecodeBase64ToByteArray(inText);
-                System.arraycopy(chunkBytes, 0, imagen, inicioBloque, chunkBytes.length);
+            try {
                 inText = inFromServer.nextLine();
-                inicioBloque += 64128;
+                String mensaje = utils.DecodeBase64ToString(inText);
+
+                while (!mensaje.equals("end")) {
+                    byte[] chunkBytes = utils.DecodeBase64ToByteArray(inText);
+                    System.arraycopy(chunkBytes, 0, imagen, inicioBloque, chunkBytes.length);
+                    inText = inFromServer.nextLine();
+                    mensaje = utils.DecodeBase64ToString(inText);
+                    if (mensaje.equals("end") || mensaje.equals("end")) {
+                        break;
+                    }
+                    inicioBloque += 64128;
+                }
+                observable.setNStreamData(this.id, utils.encodeBytesToBase64String(imagen));
+            } catch (Exception e) {
+                System.out.println("Stream interumpido");
             }
-            observable.setNStreamData(this.id, utils.encodeBytesToBase64String(imagen));
 
             inFromServer.close();
             clientSocket.close();

@@ -8,12 +8,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class ClientWindow implements Observer, Runnable {
-    private StreamObservable observable;
+    StreamObservable observable;
     Integer fps = 1;
     Boolean isStreaming = false;
     Integer streamChannels;
     JFrame frame;
     JLabel label;
+    Boolean stopWorking = false;
 
     ClientWindow(StreamObservable observable, Integer streamChannels) {
         this.observable = observable;
@@ -28,19 +29,23 @@ public class ClientWindow implements Observer, Runnable {
             this.show();
         } else if (mensaje.equals("stop")) {
             this.close();
+        } else if (mensaje.equals("close")) {
+            this.stopWorking = true;
+            this.close();
+
         }
 
     }
 
     @Override
     public void run() {
-        observable.addObserver(this);
-        while (true) {
+        this.observable.addObserver(this);
+        while (!stopWorking) {
             try {
                 Integer currentFrame = 0;
                 while (isStreaming) {
                     try {
-                        String frame = observable.getNStreamData(currentFrame);
+                        String frame = this.observable.getNStreamData(currentFrame);
                         currentFrame = (currentFrame + 1) % streamChannels;
                         updateFrame(frame);
                         TimeUnit.MILLISECONDS.sleep(1000 / fps);

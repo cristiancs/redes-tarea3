@@ -1,6 +1,5 @@
 package streaming;
 
-import java.util.Scanner;
 import streaming.StreamingServer;
 
 public class App {

@@ -43,7 +43,7 @@ public class serverRunStreamServer implements Observer, Runnable {
     @Override
     public void run() {
         Integer listenPort = 20000;
-        while (true) {
+        while (!this.cerrarSocket) {
             try {
 
                 this.StartServer(listenPort);

@@ -9,7 +9,7 @@ public class clientRunControlServer implements Observer, Runnable {
     private StreamObservable observable;
     String ip;
     Integer puerto;
-    private ThreadPool threadPool;
+    // private ThreadPool threadPool;
 
     @Override
     public void update(Observable o, Object arg) {
@@ -20,7 +20,7 @@ public class clientRunControlServer implements Observer, Runnable {
         this.observable = observable;
         this.ip = ip;
         this.puerto = puerto;
-        this.threadPool = threadPool;
+        // this.threadPool = threadPool;
     }
 
     @Override
@@ -43,7 +43,9 @@ public class clientRunControlServer implements Observer, Runnable {
                 mensaje = utils.DecodeBase64ToString(inText);
                 System.out.println(mensaje);
             }
-            System.out.println("Debuger5");
+            if (mensaje.equals("close")) {
+                observable.cambiarMensaje("close");
+            }
             inFromServer.close();
             clientSocket.close();
 
