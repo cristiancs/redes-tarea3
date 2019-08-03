@@ -44,9 +44,11 @@ public class VideoHandler implements Observer, Runnable {
     @Override
     public void run() {
         observable.addObserver(this);
+        interObservable.addObserver(this);
         while (true) {
-            if (continuePlaying) {
+            if (continuePlaying && archivo != null) {
                 try {
+                    System.out.println(archivo);
                     FFmpegFrameGrabber g = new FFmpegFrameGrabber(archivo);
                     Java2DFrameConverter converter = new Java2DFrameConverter();
                     Utils utils = new Utils();
