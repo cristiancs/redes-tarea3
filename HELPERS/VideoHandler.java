@@ -15,9 +15,9 @@ import streaming.Utils;
 public class VideoHandler {
     private StreamObservable observable;
 
-    public void start() {
+    public void start(String archivo) {
         try {
-            FFmpegFrameGrabber g = new FFmpegFrameGrabber("media/prueba...25.mp4");
+            FFmpegFrameGrabber g = new FFmpegFrameGrabber(archivo);
             Java2DFrameConverter converter = new Java2DFrameConverter();
             Utils utils = new Utils();
             g.start();
