@@ -16,4 +16,9 @@ public class Utils {
         byte[] decoded = Base64.getDecoder().decode(message);
         return new String(decoded);
     }
+
+    public byte[] DecodeBase64ToByteArray(String message) {
+        byte[] decoded = Base64.getDecoder().decode(message);
+        return decoded;
+    }
 }

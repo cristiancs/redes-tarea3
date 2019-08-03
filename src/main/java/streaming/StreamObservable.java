@@ -1,5 +1,6 @@
 package streaming;
 
+import java.util.HashMap;
 import java.util.Observable;
 
 public class StreamObservable extends Observable {
@@ -9,6 +10,7 @@ public class StreamObservable extends Observable {
     Integer stream2port = 0;
     String stream1data = "";
     String stream2data = "";
+    HashMap<Integer, String> inData = new HashMap<Integer, String>();
 
     public StreamObservable() {
         mensaje = "idle";
@@ -35,6 +37,18 @@ public class StreamObservable extends Observable {
             return stream1data;
         }
         return stream2data;
+    }
+
+    public String getNStreamData(Integer id) {
+        return inData.get(id - 1);
+    }
+
+    public void setNStreamData(Integer id, String data) {
+        if (inData.containsKey(id - 1)) {
+            inData.put(id - 1, "");
+        }
+        inData.put(id - 1, data);
+
     }
 
     public void sendStream(String stream, Integer channel) {
