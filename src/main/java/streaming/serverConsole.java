@@ -34,9 +34,11 @@ public class serverConsole implements Runnable {
                     String parts[] = inConsole.split("\\.\\.\\.");
                     parts = parts[1].split("\\.");
                     String fps = parts[0];
+                    this.internaObservable.cambiarMensaje("set_file ./media/" + inConsole);
                     this.observable.cambiarMensaje("streaming " + fps);
                     System.out.println("Ingrese detener para detener la transmisión");
                     inConsole = System.console().readLine();
+
                     while (!inConsole.equals("detener")) {
                         inConsole = System.console().readLine();
                     }

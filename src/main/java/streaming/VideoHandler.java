@@ -1,4 +1,4 @@
-package streaming_temp;
+package streaming;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -8,6 +8,9 @@ import javax.imageio.ImageIO;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
+
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
 import streaming.StreamObservable;
@@ -15,22 +18,32 @@ import streaming.Utils;
 
 public class VideoHandler implements Observer, Runnable {
     private StreamObservable observable;
+    private StreamObservable interObservable;
     private Boolean continuePlaying = false;
+    String archivo;
+
+    VideoHandler(StreamObservable observable, StreamObservable interObservable) {
+        this.observable = observable;
+        this.interObservable = interObservable;
+    }
 
     @Override
     public void update(Observable o, Object arg) {
         String mensaje = arg.toString();
-
-        if (arg.toString().equals("stop")) {
+        if (mensaje.startsWith("set_file")) {
+            archivo = mensaje.split(" ")[1];
+        }
+        if (mensaje.equals("stop")) {
             continuePlaying = false;
-        } else if (arg.toString().startsWith("streaming")) {
+        } else if (mensaje.startsWith("streaming")) {
             continuePlaying = true;
         }
 
     }
 
     @Override
-    public void start() {
+    public void run() {
+        observable.addObserver(this);
         while (true) {
             if (continuePlaying) {
                 try {
@@ -63,7 +76,13 @@ public class VideoHandler implements Observer, Runnable {
                     System.out.println("Error: " + e);
                 }
             }
-            TimeUnit.MILLISECONDS.sleep(40);
+            try {
+                TimeUnit.MILLISECONDS.sleep(40);
+
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+
         }
 
     }

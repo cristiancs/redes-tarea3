@@ -30,6 +30,7 @@ public class StreamingServer {
             this.threadPool.submitTask(new serverRunControlServer(this.threadPool, this.observable, internaObservable));
             this.threadPool.submitTask(new serverRunNewUserServer(this.threadPool, this.observable, internaObservable));
             this.threadPool.submitTask(new serverConsole(this.observable, internaObservable));
+            this.threadPool.submitTask(new VideoHandler(this.observable, internaObservable));
 
         } catch (Exception e) {
             System.out.println("Can't create threads");
