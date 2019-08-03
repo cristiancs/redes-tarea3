@@ -8,9 +8,12 @@ import javax.imageio.ImageIO;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
+
+import streaming.StreamObservable;
 import streaming.Utils;
 
 public class VideoHandler {
+    private StreamObservable observable;
 
     public void start() {
         try {
@@ -22,13 +25,17 @@ public class VideoHandler {
             while ((frame = g.grab()) != null) {
                 if (frame.image != null) {
                     BufferedImage buf = converter.convert(frame);
+                    Integer server = 0;
                     if (buf != null) {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ImageIO.write(buf, "jpg", baos);
                         baos.flush();
                         byte[] imageInByte = baos.toByteArray();
-                        System.out.println(utils.encodeBytesToBase64String(imageInByte));
+
+                        observable.sendStream(utils.encodeBytesToBase64String(imageInByte), server);
+                        // System.out.println(utils.encodeBytesToBase64String(imageInByte));
                         baos.close();
+                        server = (server + 1) % 2;
 
                     }
                 }
