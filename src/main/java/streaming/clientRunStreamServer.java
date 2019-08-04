@@ -1,6 +1,7 @@
 package streaming;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -50,29 +51,41 @@ public class clientRunStreamServer implements Observer, Runnable {
 
             String separador = utils.encodeStringToBase64String(String.join("", Collections.nCopies(64128, "0")));
             try {
-                while (!stopStream) {
-                    LinkedList<Byte> imLink = new LinkedList<Byte>();
-                    inText = inFromServer.nextLine();
-                    Integer inicioBloque = 0;
-                    while (!inText.equals(separador)) {
-                        byte[] chunkBytes = utils.DecodeBase64ToByteArray(inText);
-                        for (byte chunkb : chunkBytes) {
-                            imLink.add(chunkb);
-                        }
-                        inText = inFromServer.nextLine();
-                        inicioBloque += 64128;
-                    }
-                    byte[] imagen = new byte[imLink.size()];
-                    imLink.toArray();
-                    Integer i = 0;
-                    for (byte b : imLink) {
-                        imagen[i] = b;
-                        i += 1;
-                    }
-                    // System.out.println("Updating frame by " + this.id);
-                    observable.setNStreamData(this.id, utils.encodeBytesToBase64String(imagen));
 
-                    // inText = inFromServer.nextLine();
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                out.println(utils.encodeStringToBase64String("req"));
+                String inText = inFromServer.nextLine();
+                String mensaje = utils.DecodeBase64ToString(inText);
+
+                if (mensaje.equals("ok")) {
+                    out.println(utils.encodeStringToBase64String("ack"));
+                    inText = inFromServer.nextLine();
+                    while (!stopStream) {
+                        LinkedList<Byte> imLink = new LinkedList<Byte>();
+                        inText = inFromServer.nextLine();
+                        Integer inicioBloque = 0;
+                        while (!inText.equals(separador)) {
+                            byte[] chunkBytes = utils.DecodeBase64ToByteArray(inText);
+                            for (byte chunkb : chunkBytes) {
+                                imLink.add(chunkb);
+                            }
+                            inText = inFromServer.nextLine();
+                            inicioBloque += 64128;
+                        }
+                        byte[] imagen = new byte[imLink.size()];
+                        imLink.toArray();
+                        Integer i = 0;
+                        for (byte b : imLink) {
+                            imagen[i] = b;
+                            i += 1;
+                        }
+                        // System.out.println("Updating frame by " + this.id);
+                        observable.setNStreamData(this.id, utils.encodeBytesToBase64String(imagen));
+
+                        // inText = inFromServer.nextLine();
+                    }
+                } else {
+
                 }
 
             } catch (Exception e) {

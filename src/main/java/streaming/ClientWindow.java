@@ -81,7 +81,7 @@ public class ClientWindow implements Observer, Runnable {
     }
 
     public void updateFrame(String imagen_base64) {
-        System.out.println(imagen_base64.length());
+        // System.out.println(imagen_base64.length());
         Utils utils = new Utils();
         ImageIcon imagen2 = new ImageIcon(utils.DecodeBase64ToByteArray(imagen_base64));
         label.setIcon(imagen2);
@@ -90,7 +90,7 @@ public class ClientWindow implements Observer, Runnable {
 
     public void close() {
         isStreaming = false;
-        System.out.println("Disposing");
+        // System.out.println("Disposing");
 
         try {
             frame.setVisible(false);

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -28,6 +29,7 @@ public class serverStreamSocket implements Observer, Runnable {
     public void update(Observable o, Object arg) {
         String mensaje = arg.toString();
         String separador = utils.encodeStringToBase64String(String.join("", Collections.nCopies(64128, "0")));
+
         if (mensaje.equals(Integer.toString(id - 1))) {
             String initialString = internaObservable.getStreamData(id);
             byte[] imagen = utils.DecodeBase64ToByteArray(initialString);
@@ -39,7 +41,7 @@ public class serverStreamSocket implements Observer, Runnable {
                 this.out.println(utils.encodeBytesToBase64String(toSend));
                 inicioBloque += 64128;
             }
-            System.out.println(id + " sends mensaje");
+            // System.out.println(id + " sends mensaje");
             this.out.println(separador);
 
         }
@@ -59,11 +61,25 @@ public class serverStreamSocket implements Observer, Runnable {
             this.out = new PrintWriter(socket.getOutputStream(), true);
             internaObservable.addObserver(this);
             observable.addObserver(this);
+            Scanner inFromClient = new Scanner(socket.getInputStream());
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            String entrada = inFromClient.nextLine();
+            if (utils.DecodeBase64ToString(entrada).equals("req")) {
+                out.println(utils.encodeStringToBase64String("ok"));
+            } else {
+                try {
+                    socket.close();
+                    inFromClient.close();
+                } catch (IOException e1) {
+                }
+            }
             // out.println("Stream server" + id);
 
         } catch (Exception e) {
             observable.deleteObserver(this);
             internaObservable.deleteObserver(this);
+
             try {
                 socket.close();
             } catch (IOException e1) {

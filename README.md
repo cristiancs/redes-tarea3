@@ -20,3 +20,5 @@ Donde las plataformas pueden ser: android-arm, linux-x86_64, macosx-x86_64, wind
 # Notas
 
 Esta tarea fue realizada con java 8.
+
+La tarea tiene muchos bugs, pero en condiciones ideales (primero iniciamos al servidor, luego se conecta 1 cliente, luego iniciamos el stream) es capaz de reproducir 1 video, estuve más de 24 horas (no seguidas) realizando esta tarea, espero tengan consideración.

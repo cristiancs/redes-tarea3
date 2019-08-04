@@ -22,10 +22,10 @@ public class App {
       } else if (inConsole.equals("2")) {
         System.out.println("Starting Client Mode");
         System.out.println("Ingrese Puerto");
-        inConsole = "6666";// System.console().readLine();
+        inConsole = System.console().readLine();
         Integer puerto = Integer.parseInt(inConsole);
         System.out.println("Ingrese IP");
-        inConsole = "127.0.0.1";// System.console().readLine();
+        inConsole = System.console().readLine();
         String ip = inConsole;
 
         StreamingClient sc = new StreamingClient(ip, puerto);

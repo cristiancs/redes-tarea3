@@ -1,6 +1,7 @@
 package streaming;
 
 import java.io.File;
+import java.util.Observable;
 import java.util.Observer;
 
 public class serverConsole implements Observer, Runnable {
@@ -16,7 +17,7 @@ public class serverConsole implements Observer, Runnable {
     @Override
     public void update(Observable o, Object arg) {
         String mensaje = arg.toString();
-        if(mensaje.equals("detener"){
+        if (mensaje.equals("detener")) {
             this.pararPlay = true;
         }
     }
@@ -38,7 +39,7 @@ public class serverConsole implements Observer, Runnable {
                 }
             } else if (inConsole.equals("2")) {
                 System.out.println("Ingrese Nombre video");
-                inConsole = "prueba...25.mp4";// System.console().readLine();
+                inConsole = System.console().readLine();
                 File tempFile = new File("./media/" + inConsole);
                 boolean exists = tempFile.exists();
                 if (exists) {

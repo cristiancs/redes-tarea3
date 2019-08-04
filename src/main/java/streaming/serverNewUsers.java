@@ -59,10 +59,11 @@ public class serverNewUsers implements Observer, Runnable {
             String entrada = inFromClient.nextLine();
             if (utils.DecodeBase64ToString(entrada).equals("req")) {
                 out.println(utils.encodeStringToBase64String("ok"));
+                out.println(
+                        utils.encodeStringToBase64String(controlSocket + ";" + stream1Socket + ";" + stream2Socket));
+                inFromClient.close();
+                socket.close();
             }
-            out.println(utils.encodeStringToBase64String(controlSocket + ";" + stream1Socket + ";" + stream2Socket));
-            inFromClient.close();
-            socket.close();
 
         } catch (Exception e) {
             System.out.println("Socket " + socket + " perdido");
