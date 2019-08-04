@@ -2,6 +2,8 @@ package streaming;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -13,14 +15,17 @@ public class clientRunStreamServer implements Observer, Runnable {
     Integer id;
     Socket clientSocket;
     String inText;
+    Scanner inFromServer;
+    Boolean stopStream;
     // private ThreadPool threadPool;
-    private byte[] imagen;
 
     @Override
     public void update(Observable o, Object arg) {
         if (arg.toString().equals("end")) {
             try {
+                inFromServer.close();
                 clientSocket.close();
+                stopStream = true;
             } catch (IOException e) {
             }
         }
@@ -38,31 +43,41 @@ public class clientRunStreamServer implements Observer, Runnable {
     @Override
     public void run() {
         Utils utils = new Utils();
+        stopStream = false;
         try {
             clientSocket = new Socket(ip, puerto);
-            Scanner inFromServer = new Scanner(clientSocket.getInputStream());
+            inFromServer = new Scanner(clientSocket.getInputStream());
             Integer inicioBloque = 0;
+            LinkedList<Byte> imLink = new LinkedList<Byte>();
             try {
-                inText = inFromServer.nextLine();
-                String mensaje = utils.DecodeBase64ToString(inText);
+                while (!stopStream) {
 
-                while (!mensaje.equals("end")) {
-                    byte[] chunkBytes = utils.DecodeBase64ToByteArray(inText);
-                    System.arraycopy(chunkBytes, 0, imagen, inicioBloque, chunkBytes.length);
                     inText = inFromServer.nextLine();
-                    mensaje = utils.DecodeBase64ToString(inText);
-                    if (mensaje.equals("end") || mensaje.equals("end")) {
-                        break;
+                    String separador = utils
+                            .encodeStringToBase64String(String.join("", Collections.nCopies(64128, "0")));
+                    while (!inText.equals(separador)) {
+                        byte[] chunkBytes = utils.DecodeBase64ToByteArray(inText);
+                        for (byte chunkb : chunkBytes) {
+                            imLink.add(chunkb);
+                        }
+                        inText = inFromServer.nextLine();
+                        inicioBloque += 64128;
                     }
-                    inicioBloque += 64128;
+                    byte[] imagen = new byte[imLink.size()];
+                    imLink.toArray();
+                    Integer i = 0;
+                    for (byte b : imLink) {
+                        imagen[i] = b;
+                        i += 1;
+                    }
+                    // System.out.println("Updating frame by " + this.id);
+                    observable.setNStreamData(this.id, utils.encodeBytesToBase64String(imagen));
+                    inText = inFromServer.nextLine();
                 }
-                observable.setNStreamData(this.id, utils.encodeBytesToBase64String(imagen));
-            } catch (Exception e) {
-                System.out.println("Stream interumpido");
-            }
 
-            inFromServer.close();
-            clientSocket.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

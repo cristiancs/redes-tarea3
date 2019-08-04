@@ -32,7 +32,7 @@ public class clientRunControlServer implements Observer, Runnable {
             String inText = inFromServer.nextLine();
             String mensaje = utils.DecodeBase64ToString(inText);
 
-            System.out.println(mensaje);
+            System.out.println("Control " + mensaje);
 
             while (!mensaje.equals("close")) {
 
@@ -41,7 +41,7 @@ public class clientRunControlServer implements Observer, Runnable {
                 }
                 inText = inFromServer.nextLine();
                 mensaje = utils.DecodeBase64ToString(inText);
-                System.out.println(mensaje);
+                System.out.println("Control " + mensaje);
             }
             if (mensaje.equals("close")) {
                 observable.cambiarMensaje("close");

@@ -24,8 +24,10 @@ public class serverControlSocket implements Observer, Runnable {
     public void update(Observable o, Object arg) {
         String mensaje = arg.toString();
         try {
+            if (!mensaje.equals("0") && !mensaje.equals("1")) {
+                out.println(utils.encodeStringToBase64String(mensaje));
+            }
 
-            out.println(utils.encodeStringToBase64String(mensaje));
             if (mensaje.equals("close")) {
                 try {
                     socket.close();

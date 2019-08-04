@@ -14,7 +14,7 @@ public class serverRunNewUserServer implements Observer, Runnable {
     public void update(Observable o, Object arg) {
 
         if (arg.toString().equals("close")) {
-            System.out.println(arg);
+            // System.out.println(arg);
             this.cerrarSocket = true;
         }
     }

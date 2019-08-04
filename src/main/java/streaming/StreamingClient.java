@@ -66,7 +66,7 @@ class StreamingClient implements Observer {
             try {
                 this.threadPool.submitTask(
                         new clientRunControlServer(this.threadPool, this.observable, this.ip, this.controlPort));
-                this.threadPool.submitTask(new ClientWindow(this.observable, this.streamPorts.size() - 1));
+                this.threadPool.submitTask(new ClientWindow(this.observable, this.streamPorts.size()));
                 Integer id = 1;
                 for (Integer port : streamPorts) {
                     this.threadPool

@@ -2,6 +2,7 @@ package streaming;
 
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 import java.io.IOException;
@@ -26,7 +27,8 @@ public class serverStreamSocket implements Observer, Runnable {
     @Override
     public void update(Observable o, Object arg) {
         String mensaje = arg.toString();
-        if (mensaje.equals(Integer.toString(id))) {
+        String separador = utils.encodeStringToBase64String(String.join("", Collections.nCopies(64128, "0")));
+        if (mensaje.equals(Integer.toString(id - 1))) {
             String initialString = internaObservable.getStreamData(id);
             byte[] imagen = utils.DecodeBase64ToByteArray(initialString);
             Integer largo = imagen.length;
@@ -37,6 +39,8 @@ public class serverStreamSocket implements Observer, Runnable {
                 this.out.println(utils.encodeBytesToBase64String(toSend));
                 inicioBloque += 64128;
             }
+            System.out.println(id + " sends mensaje");
+            this.out.println(separador);
 
         }
         if (arg.toString().equals("close")) {

@@ -1,10 +1,12 @@
 package streaming;
 
 import java.io.File;
+import java.util.Observer;
 
-public class serverConsole implements Runnable {
+public class serverConsole implements Observer, Runnable {
     private StreamObservable observable;
     private StreamObservable internaObservable;
+    private Boolean pararPlay;
 
     serverConsole(StreamObservable observable, StreamObservable internaObservable) {
         this.observable = observable;
@@ -12,9 +14,17 @@ public class serverConsole implements Runnable {
     }
 
     @Override
+    public void update(Observable o, Object arg) {
+        String mensaje = arg.toString();
+        if(mensaje.equals("detener"){
+            this.pararPlay = true;
+        }
+    }
+
+    @Override
     public void run() {
         String inConsole = "";
-
+        pararPlay = false;
         while (true) {
             System.out.println(
                     "Seleccione un comando \n1) Mostrar videos disponibles \n2) Reproducir Video\n3) Apagar el Servidor");
@@ -39,7 +49,7 @@ public class serverConsole implements Runnable {
                     System.out.println("Ingrese detener para detener la transmisión");
                     inConsole = System.console().readLine();
 
-                    while (!inConsole.equals("detener")) {
+                    while (!inConsole.equals("detener") && !this.pararPlay) {
                         inConsole = System.console().readLine();
                     }
                     this.observable.cambiarMensaje("stop");

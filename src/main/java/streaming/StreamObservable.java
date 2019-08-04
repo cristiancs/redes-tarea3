@@ -40,10 +40,11 @@ public class StreamObservable extends Observable {
     }
 
     public String getNStreamData(Integer id) {
-        return inData.get(id - 1);
+        return inData.get(id);
     }
 
     public void setNStreamData(Integer id, String data) {
+        // System.out.println("id" + id);
         if (inData.containsKey(id - 1)) {
             inData.put(id - 1, "");
         }
@@ -52,6 +53,7 @@ public class StreamObservable extends Observable {
     }
 
     public void sendStream(String stream, Integer channel) {
+
         if (channel == 1) {
             stream1data = stream;
         } else {

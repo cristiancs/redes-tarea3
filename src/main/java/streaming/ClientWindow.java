@@ -43,16 +43,23 @@ public class ClientWindow implements Observer, Runnable {
         while (!stopWorking) {
             try {
                 Integer currentFrame = 0;
-                while (isStreaming) {
-                    try {
+                try {
+                    while (isStreaming) {
+
                         String frame = this.observable.getNStreamData(currentFrame);
-                        currentFrame = (currentFrame + 1) % streamChannels;
-                        updateFrame(frame);
+                        currentFrame = (currentFrame + 1) % (streamChannels - 1);
+
+                        if (frame != null) {
+                            System.out.println("CurrentFrame " + currentFrame + " ");
+                            updateFrame(frame);
+                        }
+
                         TimeUnit.MILLISECONDS.sleep(1000 / fps);
-                    } catch (Exception e) {
-                        break;
                     }
+                } catch (Exception e) {
+                    // TODO: handle exception
                 }
+
                 TimeUnit.MILLISECONDS.sleep(40);
 
             } catch (InterruptedException e) {
@@ -73,18 +80,7 @@ public class ClientWindow implements Observer, Runnable {
         frame.add(label);
         frame.pack();
         frame.setVisible(true);
-        label.setIcon(imagen2);
-        // while (true) {
-        // label.setIcon(add1 ? imagen1 : imagen2);
-
-        // try {
-        // TimeUnit.MILLISECONDS.sleep(1000 / fps);
-        // } catch (InterruptedException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // add1 = !add1;
-        // }
+        label.setIcon(imagen2); 
     }
 
     public void updateFrame(String imagen_base64) {
