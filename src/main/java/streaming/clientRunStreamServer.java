@@ -47,14 +47,13 @@ public class clientRunStreamServer implements Observer, Runnable {
         try {
             clientSocket = new Socket(ip, puerto);
             inFromServer = new Scanner(clientSocket.getInputStream());
-            Integer inicioBloque = 0;
-            LinkedList<Byte> imLink = new LinkedList<Byte>();
+
+            String separador = utils.encodeStringToBase64String(String.join("", Collections.nCopies(64128, "0")));
             try {
                 while (!stopStream) {
-
+                    LinkedList<Byte> imLink = new LinkedList<Byte>();
                     inText = inFromServer.nextLine();
-                    String separador = utils
-                            .encodeStringToBase64String(String.join("", Collections.nCopies(64128, "0")));
+                    Integer inicioBloque = 0;
                     while (!inText.equals(separador)) {
                         byte[] chunkBytes = utils.DecodeBase64ToByteArray(inText);
                         for (byte chunkb : chunkBytes) {
@@ -72,6 +71,7 @@ public class clientRunStreamServer implements Observer, Runnable {
                     }
                     // System.out.println("Updating frame by " + this.id);
                     observable.setNStreamData(this.id, utils.encodeBytesToBase64String(imagen));
+
                     // inText = inFromServer.nextLine();
                 }
 

@@ -41,7 +41,20 @@ public class ClientWindow implements Observer, Runnable {
         this.observable.addObserver(this);
         while (!stopWorking) {
             try {
+                try {
+                    Integer server = 0;
+                    while (isStreaming) {
+                        String frame = observable.getNStreamData(server);
+                        if (frame != null) {
+                            updateFrame(frame);
+                        }
+                        server = (server + 1) % streamChannels;
+                        TimeUnit.MILLISECONDS.sleep(1000 / fps);
+                    }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 TimeUnit.MILLISECONDS.sleep(40);
 
             } catch (InterruptedException e) {
@@ -65,24 +78,10 @@ public class ClientWindow implements Observer, Runnable {
         frame.setVisible(true);
         label.setIcon(imagen2);
 
-        Integer server = 0;
-        try {
-
-            while (isStreaming) {
-                String frame = observable.getNStreamData(server);
-                if (frame != null) {
-                    updateFrame(frame);
-                }
-                server = (server + 1) % streamChannels;
-                TimeUnit.MILLISECONDS.sleep(1000 / fps);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void updateFrame(String imagen_base64) {
+        System.out.println(imagen_base64.length());
         Utils utils = new Utils();
         ImageIcon imagen2 = new ImageIcon(utils.DecodeBase64ToByteArray(imagen_base64));
         label.setIcon(imagen2);
