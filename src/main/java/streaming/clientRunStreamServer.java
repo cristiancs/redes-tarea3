@@ -72,7 +72,7 @@ public class clientRunStreamServer implements Observer, Runnable {
                     }
                     // System.out.println("Updating frame by " + this.id);
                     observable.setNStreamData(this.id, utils.encodeBytesToBase64String(imagen));
-                    inText = inFromServer.nextLine();
+                    // inText = inFromServer.nextLine();
                 }
 
             } catch (Exception e) {

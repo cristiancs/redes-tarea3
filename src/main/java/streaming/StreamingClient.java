@@ -1,5 +1,6 @@
 package streaming;
 
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -46,38 +47,45 @@ class StreamingClient implements Observer {
         try {
             Socket clientSocket = new Socket(ip, puerto);
             Scanner inFromServer = new Scanner(clientSocket.getInputStream());
-            inText = inFromServer.nextLine();
-
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            out.println(utils.encodeStringToBase64String("req"));
+            String inText = inFromServer.nextLine();
             String mensaje = utils.DecodeBase64ToString(inText);
-            String[] parts = mensaje.split(";");
-            Integer i = 0;
-            for (String puerto : parts) {
 
-                if (i == 0) {
-                    controlPort = Integer.parseInt(puerto);
-                } else {
-                    this.streamPorts.add(Integer.parseInt(puerto));
+            if (mensaje.equals("ok")) {
+                out.println(utils.encodeStringToBase64String("ack"));
+                inText = inFromServer.nextLine();
+
+                mensaje = utils.DecodeBase64ToString(inText);
+                String[] parts = mensaje.split(";");
+                Integer i = 0;
+                for (String puerto : parts) {
+
+                    if (i == 0) {
+                        controlPort = Integer.parseInt(puerto);
+                    } else {
+                        this.streamPorts.add(Integer.parseInt(puerto));
+                    }
+                    i += 1;
                 }
-                i += 1;
-            }
-            inFromServer.close();
-            clientSocket.close();
+                inFromServer.close();
+                clientSocket.close();
 
-            try {
-                this.threadPool.submitTask(
-                        new clientRunControlServer(this.threadPool, this.observable, this.ip, this.controlPort));
-                this.threadPool.submitTask(new ClientWindow(this.observable, this.streamPorts.size()));
-                Integer id = 1;
-                for (Integer port : streamPorts) {
-                    this.threadPool
-                            .submitTask(new clientRunStreamServer(this.threadPool, this.observable, this.ip, port, id));
-                    id += 1;
+                try {
+                    this.threadPool.submitTask(
+                            new clientRunControlServer(this.threadPool, this.observable, this.ip, this.controlPort));
+                    this.threadPool.submitTask(new ClientWindow(this.observable, this.streamPorts.size()));
+                    Integer id = 1;
+                    for (Integer port : streamPorts) {
+                        this.threadPool.submitTask(
+                                new clientRunStreamServer(this.threadPool, this.observable, this.ip, port, id));
+                        id += 1;
+                    }
+
+                } catch (Exception e) {
+                    System.out.println(e);
                 }
-
-            } catch (Exception e) {
-                System.out.println(e);
             }
-
         } catch (Exception e) {
             System.out.println(e);
         }

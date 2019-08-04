@@ -62,6 +62,10 @@ public class serverStreamSocket implements Observer, Runnable {
             // out.println("Stream server" + id);
 
         } catch (Exception e) {
+            try {
+                socket.close();
+            } catch (IOException e1) {
+            }
             System.out.println("Socket de control " + socket + " con problemas");
         }
 

@@ -24,8 +24,9 @@ public class serverConsole implements Observer, Runnable {
     @Override
     public void run() {
         String inConsole = "";
-        pararPlay = false;
+
         while (true) {
+            pararPlay = false;
             System.out.println(
                     "Seleccione un comando \n1) Mostrar videos disponibles \n2) Reproducir Video\n3) Apagar el Servidor");
             inConsole = System.console().readLine();

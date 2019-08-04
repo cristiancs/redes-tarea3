@@ -3,6 +3,7 @@ package streaming;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -45,9 +46,18 @@ public class serverControlSocket implements Observer, Runnable {
         try {
             this.out = new PrintWriter(socket.getOutputStream(), true);
             this.utils = new Utils();
+
+            Scanner inFromClient = new Scanner(socket.getInputStream());
+
+            String entrada = inFromClient.nextLine();
+            if (utils.DecodeBase64ToString(entrada).equals("req")) {
+                out.println(utils.encodeStringToBase64String("ok"));
+            }
+
             out.println(utils.encodeStringToBase64String(this.observable.getMensaje()));
             if (this.observable.getMensaje().equals("close")) {
                 socket.close();
+                inFromClient.close();
             }
 
             this.observable.addObserver(this);
@@ -55,6 +65,10 @@ public class serverControlSocket implements Observer, Runnable {
 
         } catch (Exception e) {
             System.out.println("Socket de control " + socket + " con problemas");
+            try {
+                socket.close();
+            } catch (IOException e1) {
+            }
         }
 
     }

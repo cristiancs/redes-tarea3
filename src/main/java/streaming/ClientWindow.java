@@ -32,7 +32,13 @@ public class ClientWindow implements Observer, Runnable {
         } else if (mensaje.equals("close")) {
             this.stopWorking = true;
             this.close();
-
+        } else if (mensaje.startsWith("datastream_")) {
+            String frame = mensaje.split("_")[2];
+            if (frame != null) {
+                updateFrame(frame);
+            } else {
+                System.out.println("Null frame de " + mensaje);
+            }
         }
 
     }
@@ -42,24 +48,7 @@ public class ClientWindow implements Observer, Runnable {
         this.observable.addObserver(this);
         while (!stopWorking) {
             try {
-                Integer currentFrame = 0;
-                try {
-                    while (isStreaming) {
-
-                        String frame = this.observable.getNStreamData(currentFrame);
-                        currentFrame = (currentFrame + 1) % (streamChannels - 1);
-
-                        if (frame != null) {
-                            System.out.println("CurrentFrame " + currentFrame + " ");
-                            updateFrame(frame);
-                        }
-
-                        TimeUnit.MILLISECONDS.sleep(1000 / fps);
-                    }
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-
+              
                 TimeUnit.MILLISECONDS.sleep(40);
 
             } catch (InterruptedException e) {
@@ -67,6 +56,7 @@ public class ClientWindow implements Observer, Runnable {
                 e.printStackTrace();
             }
         }
+
     }
 
     public void show() {
@@ -80,7 +70,7 @@ public class ClientWindow implements Observer, Runnable {
         frame.add(label);
         frame.pack();
         frame.setVisible(true);
-        label.setIcon(imagen2); 
+        label.setIcon(imagen2);
     }
 
     public void updateFrame(String imagen_base64) {
@@ -93,7 +83,8 @@ public class ClientWindow implements Observer, Runnable {
     public void close() {
         isStreaming = false;
         System.out.println("Disposing");
-        try {
+
+            try {
             frame.setVisible(false);
             frame.dispose();
         } catch (Exception e) {
