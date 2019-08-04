@@ -32,13 +32,6 @@ public class ClientWindow implements Observer, Runnable {
         } else if (mensaje.equals("close")) {
             this.stopWorking = true;
             this.close();
-        } else if (mensaje.startsWith("datastream_")) {
-            String frame = mensaje.split("_")[2];
-            if (frame != null) {
-                updateFrame(frame);
-            } else {
-                System.out.println("Null frame de " + mensaje);
-            }
         }
 
     }
@@ -48,7 +41,7 @@ public class ClientWindow implements Observer, Runnable {
         this.observable.addObserver(this);
         while (!stopWorking) {
             try {
-              
+
                 TimeUnit.MILLISECONDS.sleep(40);
 
             } catch (InterruptedException e) {
@@ -71,6 +64,22 @@ public class ClientWindow implements Observer, Runnable {
         frame.pack();
         frame.setVisible(true);
         label.setIcon(imagen2);
+
+        Integer server = 0;
+        try {
+
+            while (isStreaming) {
+                String frame = observable.getNStreamData(server);
+                if (frame != null) {
+                    updateFrame(frame);
+                }
+                server = (server + 1) % streamChannels;
+                TimeUnit.MILLISECONDS.sleep(1000 / fps);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateFrame(String imagen_base64) {
@@ -84,7 +93,7 @@ public class ClientWindow implements Observer, Runnable {
         isStreaming = false;
         System.out.println("Disposing");
 
-            try {
+        try {
             frame.setVisible(false);
             frame.dispose();
         } catch (Exception e) {

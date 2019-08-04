@@ -62,6 +62,8 @@ public class serverStreamSocket implements Observer, Runnable {
             // out.println("Stream server" + id);
 
         } catch (Exception e) {
+            observable.deleteObserver(this);
+            internaObservable.deleteObserver(this);
             try {
                 socket.close();
             } catch (IOException e1) {

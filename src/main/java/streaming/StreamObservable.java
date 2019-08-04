@@ -44,13 +44,11 @@ public class StreamObservable extends Observable {
     }
 
     public void setNStreamData(Integer id, String data) {
-        // System.out.println("id" + id);
         if (!inData.containsKey(id - 1)) {
             inData.put(id - 1, "");
         }
         inData.put(id - 1, data);
         setChanged();
-        notifyObservers("datastream_" + id + "_" + data);
 
     }
 
